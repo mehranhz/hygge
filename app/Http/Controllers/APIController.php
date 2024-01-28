@@ -60,11 +60,12 @@ class APIController extends Controller
      * @param int $error_code
      * @return JsonResponse
      */
-    public function respondWithError(string $message, int $error_code = 0): JsonResponse
+    public function respondWithError(string $message, int $error_code = 0, int $http_status_code = 500): JsonResponse
     {
         $this->response->setMessage($message);
         $this->response->setErrorCode($error_code);
         $this->response->setSuccess(false);
+        $this->response->setHttpStatusCode($http_status_code);
         return $this->response->getJSON();
     }
 
