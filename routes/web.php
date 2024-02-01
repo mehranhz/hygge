@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/verify_email/{token}',[\App\Http\Controllers\REST\Auth\AuthController::class,'verifyEmail'])->name('verify_email');
