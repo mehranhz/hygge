@@ -5,7 +5,6 @@ namespace App\Repository\Eloquent;
 use App\Models\EmailVerificationToken;
 use App\Repository\EmailVerificationTokenRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Hash;
 
 class EmailVerificationTokenRepository extends BaseRepository implements EmailVerificationTokenRepositoryInterface
 {
