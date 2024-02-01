@@ -23,20 +23,19 @@ class EmailVerificationTokenRepository extends BaseRepository implements EmailVe
      */
     public function create(array $attributes): Model
     {
-        $token = $this->model->create([
+        return $this->model->create([
             'email' => $attributes['email'],
             'token' => $attributes['token'],
             'expiration_date' => now()->addMinute(120)
         ]);
 
-        return $token;
     }
 
     /**
      * @param string $token
-     * @return mixed
+     * @return Model
      */
-    public function findByToken(string $token)
+    public function findByToken(string $token): Model
     {
         return $this->model->where('token',$token)->first();
     }
