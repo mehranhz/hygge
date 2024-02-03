@@ -9,9 +9,10 @@ class User
     use Notifiable;
 
     public function __construct(
-        protected string $name,
-        public string $email,
-        protected string $phone
+        protected string      $name,
+        public string         $email,
+        protected string      $phone,
+        protected string|null $verificationDate = null
     )
     {
 
@@ -20,7 +21,7 @@ class User
     /**
      * @return string
      */
-    public function getName():string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -28,7 +29,7 @@ class User
     /**
      * @return string
      */
-    public function getEmail():string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -36,9 +37,13 @@ class User
     /**
      * @return string
      */
-    public function getPhone():string
+    public function getPhone(): string
     {
         return $this->phone;
     }
 
+    public function getVerificationDate(): string|null
+    {
+        return $this->verificationDate;
+    }
 }

@@ -34,7 +34,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $user = $this->model->where('email', $email)->first();
 
         if ($user) {
-            return new \App\Entity\User($user->name, $user->email, $user->phone);
+            return new \App\Entity\User($user->name, $user->email, $user->phone,$user->email_verified_at);
         }
         throw new \Exception('user not found', 404);
     }
