@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Repository\Eloquent\UserRepository;
 use App\Services\Contracts\UserTokenGeneratorInterface;
 
-class SanctumTokenGenerator implements UserTokenGeneratorInterface
+class SanctumTokenGeneratorService implements UserTokenGeneratorInterface
 {
     protected UserRepository $userRepository;
 

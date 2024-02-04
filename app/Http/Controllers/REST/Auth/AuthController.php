@@ -9,7 +9,7 @@ use App\Http\Requests\REST\LoginViaEmailAndPasswordRequest;
 use App\Services\Contracts\AuthenticationInterface;
 use App\Services\Contracts\UserRegistrationInterface;
 use App\Services\Contracts\UserTokenGeneratorInterface;
-use App\Services\SanctumTokenGenerator;
+use App\Services\SanctumTokenGeneratorService;
 use Illuminate\Http\JsonResponse;
 
 
@@ -17,8 +17,7 @@ class AuthController extends APIController
 {
     private UserRegistrationInterface $userRegistrationService;
     private AuthenticationInterface $authenticationService;
-
-    private UserTokenGeneratorInterface $tokenGenerator;
+    private UserTokenGeneratorInterface $tokenGeneratorService;
 
 
     /**
@@ -30,7 +29,7 @@ class AuthController extends APIController
         parent::__construct();
         $this->userRegistrationService = $userRegistration;
         $this->authenticationService = $authenticationService;
-        $this->tokenGenerator = new SanctumTokenGenerator();
+        $this->tokenGeneratorService = new SanctumTokenGeneratorService();
     }
 
     /**
@@ -62,7 +61,7 @@ class AuthController extends APIController
                 'password' => $request->password
             ]);
 
-            $token = $this->tokenGenerator->generateToken([
+            $token = $this->tokenGeneratorService->generateToken([
                 'email' => $request->email
             ]);
 
