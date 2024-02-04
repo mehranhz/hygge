@@ -8,6 +8,7 @@ use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\REST\LoginViaEmailAndPasswordRequest;
 use App\Services\Contracts\AuthenticationInterface;
 use App\Services\Contracts\UserRegistrationInterface;
+use App\Services\Contracts\UserTokenGeneratorInterface;
 use App\Services\SanctumTokenGenerator;
 use Illuminate\Http\JsonResponse;
 
@@ -17,9 +18,12 @@ class AuthController extends APIController
     private UserRegistrationInterface $userRegistrationService;
     private AuthenticationInterface $authenticationService;
 
+    private UserTokenGeneratorInterface $tokenGenerator;
+
 
     /**
      * @param UserRegistrationInterface $userRegistration
+     * @param AuthenticationInterface $authenticationService
      */
     public function __construct(UserRegistrationInterface $userRegistration, AuthenticationInterface $authenticationService)
     {
