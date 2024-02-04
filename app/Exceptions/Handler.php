@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Http\Response\Response;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -27,4 +28,22 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    private function handleAPIException(Throwable $e)
+    {
+        $response = new Response();
+        $response->setHttpStatusCode(500);
+        $response->setSuccess(false);
+        $response->setMessage('Something went wrong!.');
+        $response->setErrorCode($e->getCode());
+        return $response->getJSON();
+    }
+
+//    public function render($request, Throwable $e)
+//    {
+//        if ($request->wantsJson()) {
+//            return $this->handleAPIException($e);
+//        }
+//        return parent::render($request, $e);
+//    }
 }
