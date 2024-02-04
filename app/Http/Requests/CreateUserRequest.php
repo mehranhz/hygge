@@ -32,18 +32,4 @@ class CreateUserRequest extends APIRequest
         ];
     }
 
-    /**
-     * @param Validator $validator
-     * @return void
-     */
-    protected function failedValidation(Validator $validator): void
-    {
-        throw new HttpResponseException(
-            $this->structResponseError(
-                $validator->errors()->toArray(),
-                error_code: 422,
-                http_status_code: 400
-            ));
-    }
-
 }

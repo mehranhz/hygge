@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Http\Response\Response;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 
 class APIRequest extends FormRequest
@@ -33,4 +35,19 @@ class APIRequest extends FormRequest
 
         return $this->response->getJSON();
     }
+
+    /**
+     * @param Validator $validator
+     * @return void
+     */
+    protected function failedValidation(Validator $validator): void
+    {
+        throw new HttpResponseException(
+            $this->structResponseError(
+                $validator->errors()->toArray(),
+                error_code: 422,
+                http_status_code: 400
+            ));
+    }
+
 }
