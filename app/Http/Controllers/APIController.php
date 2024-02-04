@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Exceptions\ServiceCallException;
 use App\Http\Response\Response;
 use Illuminate\Http\JsonResponse;
 
@@ -47,10 +48,10 @@ class APIController extends Controller
         return $this->response->getJSON();
     }
 
-    public function createdSuccessfullyRespond(array $data=[],string $message = "record inserted successfully!"): JsonResponse
+    public function createdSuccessfullyRespond(array $data = [], string $message = "record inserted successfully!"): JsonResponse
     {
         $this->response->setHttpStatusCode(201);
-        return $this->respond(data:$data,message: $message);
+        return $this->respond(data: $data, message: $message);
 
     }
 
@@ -73,5 +74,18 @@ class APIController extends Controller
     {
         $this->response->setHttpStatusCode(404);
         return $this->respondWithError($message, $error_code);
+    }
+
+    /**
+     * @param ServiceCallException $exception
+     * @return JsonResponse
+     */
+    public function respondFromServiceCallException(ServiceCallException $exception): JsonResponse
+    {
+        $this->response->setMessage($exception->getMessage());
+        $this->response->setErrorCode($exception->getCode());
+        $this->response->setHttpStatusCode($exception->getHttpStatusCode());
+
+        return $this->response->getJSON();
     }
 }
