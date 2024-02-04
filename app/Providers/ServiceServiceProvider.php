@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\AuthenticateViaEmailAndPasswordService;
+use App\Services\Contracts\AuthenticationInterface;
 use App\Services\Contracts\EmailVerificationInterface;
 use App\Services\Contracts\UserRegistrationInterface;
 use App\Services\Contracts\UserServiceInterface;
@@ -20,6 +22,7 @@ class ServiceServiceProvider extends ServiceProvider
         $this->app->bind(UserRegistrationInterface::class, UserRegistrationService::class);
         $this->app->bind(EmailVerificationInterface::class, EmailVerificationService::class);
         $this->app->bind(UserServiceInterface::class,UserService::class);
+        $this->app->bind(AuthenticationInterface::class, AuthenticateViaEmailAndPasswordService::class);
     }
 
     /**

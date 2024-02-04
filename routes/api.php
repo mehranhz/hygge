@@ -21,4 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->name('v1.')->group(function () {
     Route::post('/register', [\App\Http\Controllers\REST\Auth\AuthController::class, 'selfRegister'])->name('auth.register');
+    Route::post('/login-with-email', [\App\Http\Controllers\REST\Auth\AuthController::class,'loginViaEmailAndPassword'])->name('auth.login-with-email');
 });

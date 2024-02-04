@@ -12,7 +12,8 @@ class User
         protected string      $name,
         public string         $email,
         protected string      $phone,
-        protected string|null $verificationDate = null
+        protected string|null $verificationDate = null,
+        protected string|null $password = null,
     )
     {
 
@@ -45,5 +46,10 @@ class User
     public function getVerificationDate(): string|null
     {
         return $this->verificationDate;
+    }
+
+    public function getPassword():string|null
+    {
+        return $this->password;
     }
 }

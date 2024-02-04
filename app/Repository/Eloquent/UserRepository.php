@@ -34,7 +34,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $user = $this->model->where('email', $email)->first();
 
         if ($user) {
-            return new \App\Entity\User($user->name, $user->email, $user->phone,$user->email_verified_at);
+            return new \App\Entity\User($user->name, $user->email, $user->phone, $user->email_verified_at, $user->password);
         }
         throw new \Exception('user not found', 404);
     }
@@ -48,11 +48,20 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function updateVerificationDateByUserEmail(string $email, string $timestamp): void
     {
         $user = $this->model->where('email', $email)->first();
-        if ($user){
+        if ($user) {
             $user->update([
                 'email_verified_at' => $timestamp
             ]);
 
         }
+    }
+
+    /**
+     * @param string $email
+     * @return User
+     */
+    public function getModelInstanceByEmail(string $email): User
+    {
+        return $this->model->where('email', $email)->first();
     }
 }
