@@ -14,12 +14,20 @@ class PermissionCreateService implements PermissionCreateInterface
 {
     private PermissionRepositoryInterface $permissionRepository;
 
+    /**
+     * @param PermissionRepositoryInterface $permissionRepository
+     */
     public function __construct(PermissionRepositoryInterface $permissionRepository)
     {
         $this->permissionRepository = $permissionRepository;
     }
 
 
+    /**
+     * @param array $attributes
+     * @return Permission
+     * @throws ServiceCallException
+     */
     public function create(array $attributes): Permission
     {
         try {

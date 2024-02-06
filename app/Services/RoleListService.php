@@ -10,11 +10,18 @@ class RoleListService implements RoleListInterface
 {
     private RoleRepositoryInterface $roleRepository;
 
+    /**
+     * @param RoleRepositoryInterface $roleRepository
+     */
     public function __construct(RoleRepositoryInterface $roleRepository)
     {
         $this->roleRepository = $roleRepository;
     }
 
+    /**
+     * @param array $query
+     * @return PaginatedData
+     */
     public function find(array $query): PaginatedData{
         return $this->roleRepository->get($query);
     }

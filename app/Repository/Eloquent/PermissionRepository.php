@@ -11,6 +11,9 @@ class PermissionRepository extends BaseRepository implements PermissionRepositor
 {
     protected array $searchables = ['name'];
 
+    /**
+     * @param Permission $model
+     */
     public function __construct(Permission $model)
     {
         parent::__construct($model);
