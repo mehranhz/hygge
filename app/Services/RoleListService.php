@@ -3,8 +3,11 @@
 namespace App\Services;
 
 use App\DTO\PaginatedData;
+use App\Exceptions\ErrorCode;
+use App\Exceptions\ServiceCallException;
 use App\Repository\RoleRepositoryInterface;
 use App\Services\Contracts\RoleListInterface;
+use Illuminate\Support\Facades\Log;
 
 class RoleListService implements RoleListInterface
 {
@@ -22,7 +25,13 @@ class RoleListService implements RoleListInterface
      * @param array $query
      * @return PaginatedData
      */
-    public function find(array $query): PaginatedData{
-        return $this->roleRepository->get($query);
+    public function find(array $query): PaginatedData
+    {
+        try {
+            return $this->roleRepository->get($query);
+        } catch (\Exception $exception) {
+            Log::error($exception->getMessage());
+            throw new ServiceCallException('failed to get roles list', code: ErrorCode::Unknown->value);
+        }
     }
 }
