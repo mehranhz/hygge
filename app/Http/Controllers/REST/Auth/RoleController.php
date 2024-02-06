@@ -5,22 +5,22 @@ namespace App\Http\Controllers\REST\Auth;
 use App\Exceptions\ServiceCallException;
 use App\Http\Controllers\APIController;
 use App\Http\Requests\REST\RoleCreateRequest;
-use App\Services\Contracts\RoleCreateServiceInterface;
+use App\Services\Contracts\RoleCreateInterface;
 use App\Services\Contracts\RoleListInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class RoleController extends APIController
 {
-    private RoleCreateServiceInterface $roleCreateService;
+    private RoleCreateInterface $roleCreateService;
 
     private RoleListInterface $roleListService;
 
     /**
-     * @param RoleCreateServiceInterface $roleCreateService
+     * @param RoleCreateInterface $roleCreateService
      * @param RoleListInterface $roleListService
      */
-    public function __construct(RoleCreateServiceInterface $roleCreateService, RoleListInterface $roleListService)
+    public function __construct(RoleCreateInterface $roleCreateService, RoleListInterface $roleListService)
     {
         parent::__construct();
         $this->roleCreateService = $roleCreateService;

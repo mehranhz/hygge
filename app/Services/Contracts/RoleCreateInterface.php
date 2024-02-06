@@ -5,7 +5,7 @@ namespace App\Services\Contracts;
 use App\Entity\Role;
 use App\Exceptions\ServiceCallException;
 
-interface RoleCreateServiceInterface
+interface RoleCreateInterface
 {
     /**
      * @param array $attributes

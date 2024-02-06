@@ -6,11 +6,11 @@ use App\Entity\Role;
 use App\Exceptions\ErrorCode;
 use App\Exceptions\ServiceCallException;
 use App\Repository\RoleRepositoryInterface;
-use App\Services\Contracts\RoleCreateServiceInterface;
+use App\Services\Contracts\RoleCreateInterface;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Exceptions\RoleAlreadyExists;
 
-class RoleCreateService implements RoleCreateServiceInterface
+class RoleCreateService implements RoleCreateInterface
 {
     private RoleRepositoryInterface $roleRepository;
 
@@ -35,11 +35,11 @@ class RoleCreateService implements RoleCreateServiceInterface
             return new Role($role_instance->name);
         } catch (RoleAlreadyExists  $exception) {
             Log::error($exception->getMessage());
-            throw new ServiceCallException("a role named $attributes[name] already exists", code: ErrorCode::SQLDuplicateEntry->value,httpStatusCode: 400, context: [
+            throw new ServiceCallException("a role named $attributes[name] already exists", code: ErrorCode::SQLDuplicateEntry->value, httpStatusCode: 400, context: [
                 "attributes" => $attributes,
             ]);
         } catch (\Exception $exception) {
-
+            Log::error($exception->getMessage());
             throw new ServiceCallException('failed to create role', code: ErrorCode::Unknown->value, context: [
                 "attributes" => $attributes,
             ]);
