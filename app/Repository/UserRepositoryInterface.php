@@ -18,5 +18,14 @@ interface UserRepositoryInterface extends EloquentRepositoryInterface
      */
     public function findByEmail(string $email): User;
 
-    public function updateVerificationDateByUserEmail(string $email,string $timestamp);
+    public function updateVerificationDateByUserEmail(string $email, string $timestamp);
+
+    /**
+     * @param string $email
+     * @return \App\Models\User
+     */
+    public function getModelInstanceByEmail(string $email): \App\Models\User;
+
+
+    public function assignRoleToUser(int $userID, string $roleName): void;
 }

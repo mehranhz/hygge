@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\DTO\PaginatedData;
 use Illuminate\Database\Eloquent\Model;
 
 interface EloquentRepositoryInterface
@@ -17,4 +18,15 @@ interface EloquentRepositoryInterface
      * @return Model|null
      */
     public function find(int $id): ?Model;
+
+    /**
+     * @param array $query
+     * @return PaginatedData
+     */
+    public function get(array $query): PaginatedData;
+
+    /**
+     * @return string
+     */
+    public function getModelName(): string;
 }

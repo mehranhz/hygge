@@ -7,6 +7,7 @@ use App\Exceptions\ServiceCallException;
 use App\Repository\UserRepositoryInterface;
 use App\Services\Contracts\AuthenticationInterface;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class AuthenticateViaEmailAndPasswordService implements AuthenticationInterface
 {
@@ -37,6 +38,7 @@ class AuthenticateViaEmailAndPasswordService implements AuthenticationInterface
             ]);
 
         } catch (\Exception $exception) {
+            Log::error($exception->getMessage());
             throw new ServiceCallException('there is no user with this credentials', ErrorCode::UserNotFound->value, httpStatusCode: 401, context: [
                 'email' => $attributes['email'],
                 'password' => '****'
