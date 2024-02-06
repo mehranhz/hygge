@@ -4,6 +4,9 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Models\Permission;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +24,14 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        try {
+            foreach (Permission::all()->toArray() as $permission){
+                Gate::define($permission->name,function ($user) use($permission){
+                    return $user->can($permission->name);
+                });
+            }
+        }catch (\Exception $exception){
+            Log::error($exception->getMessage());
+        }
     }
 }
