@@ -47,6 +47,8 @@ class AccessController extends APIController
      */
     public function givePermissionToRole(GivePermissionToRoleRequest $request): JsonResponse
     {
+//        $this->authorize('create permission');
+
         try {
             $this->roleGivePermissionService->givePermissionToRole($request->roleID, $request->permissionID);
             return $this->respond(message: "permission have been successfully assigned to role");

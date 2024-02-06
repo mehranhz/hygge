@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Http\Response\Response;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -32,18 +33,26 @@ class Handler extends ExceptionHandler
     private function handleAPIException(Throwable $e)
     {
         $response = new Response();
-        $response->setHttpStatusCode(500);
         $response->setSuccess(false);
-        $response->setMessage('Something went wrong!.');
-        $response->setErrorCode($e->getCode());
+        if (is_a($e, AuthorizationException::class)) {
+            $response->setHttpStatusCode(403);
+            $response->setErrorCode(403);
+            $response->setMessage('Action is unauthorized.');
+
+        }else{
+            $response->setHttpStatusCode(500);
+            $response->setMessage('Something went wrong!.');
+            $response->setErrorCode($e->getCode());
+        }
+
         return $response->getJSON();
     }
 
-//    public function render($request, Throwable $e)
-//    {
-//        if ($request->wantsJson()) {
-//            return $this->handleAPIException($e);
-//        }
-//        return parent::render($request, $e);
-//    }
+    public function render($request, Throwable $e)
+    {
+        if ($request->wantsJson()) {
+            return $this->handleAPIException($e);
+        }
+        return parent::render($request, $e);
+    }
 }
