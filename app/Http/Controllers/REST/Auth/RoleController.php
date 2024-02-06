@@ -5,13 +5,10 @@ namespace App\Http\Controllers\REST\Auth;
 use App\Exceptions\ServiceCallException;
 use App\Http\Controllers\APIController;
 use App\Http\Requests\REST\RoleCreateRequest;
-use App\Repository\Eloquent\RoleRepository;
 use App\Services\Contracts\RoleCreateServiceInterface;
 use App\Services\Contracts\RoleListInterface;
-use App\Services\RoleListService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 
 class RoleController extends APIController
 {
@@ -21,6 +18,7 @@ class RoleController extends APIController
 
     /**
      * @param RoleCreateServiceInterface $roleCreateService
+     * @param RoleListInterface $roleListService
      */
     public function __construct(RoleCreateServiceInterface $roleCreateService, RoleListInterface $roleListService)
     {
@@ -29,16 +27,24 @@ class RoleController extends APIController
         $this->roleListService = $roleListService;
     }
 
-    public function index(Request $request)
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function index(Request $request): JsonResponse
     {
         try {
             $rolesCollection = $this->roleListService->find($request->toArray());
-            return $this->respond(data: $rolesCollection["data"], meta_data: $rolesCollection["pagination"]);
+            return $this->respond(data: $rolesCollection->getData(), meta_data: $rolesCollection->getPaginationArray());
         } catch (ServiceCallException $exception) {
             return $this->respondFromServiceCallException($exception);
         }
     }
 
+    /**
+     * @param RoleCreateRequest $request
+     * @return JsonResponse
+     */
     public function create(RoleCreateRequest $request): JsonResponse
     {
         try {

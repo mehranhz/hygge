@@ -2,6 +2,7 @@
 
 namespace App\Repository\Eloquent;
 
+use App\DTO\PaginatedData;
 use App\Exceptions\ErrorCode;
 use App\Exceptions\RepositoryRecordCreationException;
 use App\Repository\Paginatable;
@@ -65,17 +66,19 @@ abstract class BaseRepository
     }
 
 
-    public function get(array $query=[]): array
+    /**
+     * @param array $query
+     * @return PaginatedData
+     */
+    public function get(array $query = []): PaginatedData
     {
         $collection = $this->model->where($this->getFilters($query))->paginate(...$this->makePaginationParams($query))->toArray();
-
-        // removing data from collection
         $data = $collection["data"];
 
-        array_splice($collection,1,1);
-         return [
-             "data" => $data,
-             "pagination" => $collection
-         ];
+        // removing data from collection
+        array_splice($collection, 1, 1);
+
+        return new PaginatedData($data, $collection);
+
     }
 }
