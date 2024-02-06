@@ -3,7 +3,6 @@
 namespace App\Exceptions;
 
 
-
 enum ErrorCode: int
 {
     // general
@@ -14,5 +13,8 @@ enum ErrorCode: int
 
     // Authentication and Authorization
 
+
+    // Resource not found
+    case ResourceNotFound = 404;
     case UserNotFound = 452;
 }

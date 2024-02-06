@@ -5,12 +5,14 @@ namespace App\Repository\Eloquent;
 use App\DTO\PaginatedData;
 use App\Exceptions\ErrorCode;
 use App\Exceptions\RepositoryRecordCreationException;
+use App\Repository\EloquentRepositoryInterface;
 use App\Repository\Paginatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
+use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Database\UniqueConstraintViolationException;
 
-abstract class BaseRepository
+abstract class BaseRepository implements EloquentRepositoryInterface
 {
     use Paginatable;
 
@@ -23,6 +25,15 @@ abstract class BaseRepository
     public function __construct(Model $model)
     {
         $this->model = $model;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getModelName(): string
+    {
+        return class_basename($this->model);
     }
 
     /**
@@ -50,7 +61,13 @@ abstract class BaseRepository
      */
     public function find($id): ?Model
     {
-        return $this->model->find($id);
+        $instance =  $this->model->find($id);
+        if ($instance === null){
+            $className= $this->getModelName();
+            throw new RecordsNotFoundException("there is no $className with provided id:$id",code: 404);
+        }
+
+        return $instance;
     }
 
     protected function getFilters(array $query)

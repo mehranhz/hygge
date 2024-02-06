@@ -20,8 +20,13 @@ interface EloquentRepositoryInterface
     public function find(int $id): ?Model;
 
     /**
-     * @param string $query
+     * @param array $query
      * @return PaginatedData
      */
     public function get(array $query): PaginatedData;
+
+    /**
+     * @return string
+     */
+    public function getModelName(): string;
 }

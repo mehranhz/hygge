@@ -12,6 +12,7 @@ use Spatie\Permission\Models\Role;
 class RoleRepository extends BaseRepository implements RoleRepositoryInterface
 {
     protected array $searchables = ['name'];
+
     public function __construct(Role $role)
     {
         parent::__construct($role);

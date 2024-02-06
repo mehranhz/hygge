@@ -4,7 +4,9 @@ namespace App\Repository\Eloquent;
 
 use App\Models\User;
 use App\Repository\UserRepositoryInterface;
+use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Support\Collection;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -63,5 +65,21 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function getModelInstanceByEmail(string $email): User
     {
         return $this->model->where('email', $email)->first();
+    }
+
+    /**
+     * @param int $userID
+     * @param string $roleName
+     * @return void
+     */
+
+    public function assignRoleToUser(int $userID, string $roleName): void
+    {
+        $user = $this->find($userID);
+        if ($user !== null) {
+            $user->assignRole($roleName);
+        } else {
+            throw new ResourceNotFoundException("user not found with id:$userID");
+        }
     }
 }
