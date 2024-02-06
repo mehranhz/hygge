@@ -8,14 +8,28 @@ use App\Repository\Paginatable;
 use App\Repository\RoleRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\Permission\Models\Role;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class RoleRepository extends BaseRepository implements RoleRepositoryInterface
 {
     protected array $searchables = ['name'];
 
+    /**
+     * @param Role $role
+     */
     public function __construct(Role $role)
     {
         parent::__construct($role);
     }
 
+    /**
+     * @param int $roleID
+     * @param string $permissionName
+     * @return void
+     */
+    public function givePermissionToRole(int $roleID, string $permissionName): void
+    {
+        $role = $this->find($roleID);
+        $role->givePermissionTo($permissionName);
+    }
 }

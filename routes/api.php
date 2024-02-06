@@ -32,6 +32,7 @@ Route::prefix('v1')->name('v1.')->group(function () {
             Route::post('/permission', [\App\Http\Controllers\REST\Auth\PermissionController::class, 'create'])->name('permission.create');
             Route::get('/permission', [\App\Http\Controllers\REST\Auth\PermissionController::class, 'index'])->name('permission.get');
             Route::post('/user/assign-role', [\App\Http\Controllers\REST\Auth\AccessController::class, 'assignRoleToUser'])->name('user.assign_role');
+            Route::post('/role/give-permission', [\App\Http\Controllers\REST\Auth\AccessController::class, 'givePermissionToRole'])->name('role.give_permission');
         });
     });
 
