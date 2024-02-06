@@ -26,7 +26,7 @@ class AccessController extends APIController
      * @param RoleToUserAssignmentRequest $request
      * @return JsonResponse
      */
-    public function assignRoleToUser(RoleToUserAssignmentRequest $request)
+    public function assignRoleToUser(RoleToUserAssignmentRequest $request):JsonResponse
     {
         try {
             $this->roleAssignmentService->assignRoleToUser($request->userID, $request->roleID);
