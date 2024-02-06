@@ -27,8 +27,9 @@ Route::prefix('v1')->name('v1.')->group(function () {
 
         // access control management routes
         Route::post('/role', [\App\Http\Controllers\REST\Auth\RoleController::class, 'create'])->name('role.create');
-        Route::get('/role', [\App\Http\Controllers\REST\Auth\RoleController::class, 'index']);
-        Route::post('/permission', [\App\Http\Controllers\REST\Auth\PermissionController::class, 'create']);
+        Route::get('/role', [\App\Http\Controllers\REST\Auth\RoleController::class, 'index'])->name('role.get');
+        Route::post('/permission', [\App\Http\Controllers\REST\Auth\PermissionController::class, 'create'])->name('permission.create');
+        Route::get('/permission', [\App\Http\Controllers\REST\Auth\PermissionController::class, 'index'])->name('permission.get');
     });
 
 });
