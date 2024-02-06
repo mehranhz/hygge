@@ -24,6 +24,7 @@ class RoleListService implements RoleListInterface
     /**
      * @param array $query
      * @return PaginatedData
+     * @throws ServiceCallException
      */
     public function find(array $query): PaginatedData
     {
