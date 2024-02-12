@@ -23,9 +23,9 @@ class PostController extends APIController
 
     /**
      * @param PostCreateRequest $request
-     * @return JsonResponse|void
+     * @return JsonResponse
      */
-    public function store(PostCreateRequest $request)
+    public function store(PostCreateRequest $request): JsonResponse
     {
         try {
             $post = $this->postCreateService->create($request->toArray());
