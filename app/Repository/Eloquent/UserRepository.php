@@ -4,6 +4,7 @@ namespace App\Repository\Eloquent;
 
 use App\Models\User;
 use App\Repository\UserRepositoryInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Support\Collection;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -81,5 +82,10 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         } else {
             throw new ResourceNotFoundException("user not found with id:$userID");
         }
+    }
+
+    public function convert(Model $source): \App\Entity\User
+    {
+        return new \App\Entity\User($source->name, $source->email, $source->phone);
     }
 }

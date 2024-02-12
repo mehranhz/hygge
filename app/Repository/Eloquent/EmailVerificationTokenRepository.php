@@ -38,4 +38,9 @@ class EmailVerificationTokenRepository extends BaseRepository implements EmailVe
     {
         return $this->model->where('token',$token)->first();
     }
+
+    public function convert(Model $source): mixed
+    {
+        return $source;
+    }
 }

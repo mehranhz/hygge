@@ -18,4 +18,9 @@ class PermissionRepository extends BaseRepository implements PermissionRepositor
     {
         parent::__construct($model);
     }
+
+    public function convert(Model $source): mixed
+    {
+        return new \App\Entity\Permission($source->name);
+    }
 }

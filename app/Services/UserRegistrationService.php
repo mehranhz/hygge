@@ -31,12 +31,8 @@ class UserRegistrationService implements UserRegistrationInterface
     public function create(array $attributes): User
     {
         try {
-            $userModelInstance = $this->userRepository->create($attributes);
-            $user = new User(
-                $userModelInstance->name,
-                $userModelInstance->email,
-                $userModelInstance->phone
-            );
+            $user =  $this->userRepository->create($attributes);
+
             UserSelfRegistered::dispatch($user);
         } catch (RepositoryRecordCreationException $exception) {
             throw new ServiceCallException($exception->getMessage(), $exception->getCode(), httpStatusCode: 400);

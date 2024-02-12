@@ -23,6 +23,6 @@ class RoleRepositoryTest extends TestCase
     /** @test */
     public function create_method_returns_a_role()
     {
-        $this->assertEquals(Role::class, get_class($this->role));
+        $this->assertEquals(\App\Entity\Role::class, get_class($this->role));
     }
 }

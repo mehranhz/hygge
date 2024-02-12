@@ -47,6 +47,12 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+
+    /**
+     * @var string
+     */
+    protected string $guard_name = 'sanctum';
+
     public function posts(){
         return $this->belongsToMany(Post::class);
     }
