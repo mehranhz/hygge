@@ -4,13 +4,21 @@ namespace App\Entity;
 
 class Post
 {
+    /**
+     * @param string $title
+     * @param string $body
+     * @param string|null $thumbnail
+     * @param string|null $metaDescription
+     * @param string|null $metaTitle
+     * @param User $author
+     */
     public function __construct(
-        private string $title,
-        private string $body,
-        private string $thumbnail,
-        private string $metaDescription,
-        private string $metaTitle,
-        private User   $author
+        private string      $title,
+        private string      $body,
+        private string|null $thumbnail = null,
+        private string|null $metaDescription = null,
+        private string|null $metaTitle = null,
+        private User        $author
     )
     {
     }

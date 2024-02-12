@@ -17,7 +17,7 @@ return new class extends Migration
             $table->longText('body')->nullable();
             $table->unsignedBigInteger('thumbnail')->nullable();
             $table->foreign('thumbnail')->references('id')->on('media')->restrictOnDelete();
-            $table->string('type');
+            $table->string('type')->default('default');
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
             $table->smallInteger('read_time')->default(0);

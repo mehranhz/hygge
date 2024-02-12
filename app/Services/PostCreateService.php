@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\Response\Blog\PostCreateResponse;
 use App\Entity\Post;
 use App\Exceptions\ErrorCode;
 use App\Exceptions\ServiceCallException;
@@ -18,14 +19,15 @@ class PostCreateService implements PostCreateInterface
         $this->postRepository = $postRepository;
     }
 
-    public function create(array $attributes): Post
+    public function create(array $attributes): PostCreateResponse
     {
         try {
-            $modeInstance = $this->postRepository->create($attributes);
-            return new Post();
+            $post = $this->postRepository->create($attributes);
+            return new PostCreateResponse($post->getTitle(), $post->getBody(), $post->getAuthor()->getName());
         } catch (\Exception $exception) {
             Log::error($exception->getMessage());
-            throw new ServiceCallException('failed to create new post.', ErrorCode::Unknown->value, httpStatusCode: 500);
+            $message = $exception->getMessage();
+            throw new ServiceCallException("failed to create new post: $message.", ErrorCode::Unknown->value, httpStatusCode: 500);
         }
     }
 }

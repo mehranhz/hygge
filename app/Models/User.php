@@ -54,6 +54,6 @@ class User extends Authenticatable
     protected string $guard_name = 'sanctum';
 
     public function posts(){
-        return $this->belongsToMany(Post::class);
+        return $this->hasMany(Post::class);
     }
 }

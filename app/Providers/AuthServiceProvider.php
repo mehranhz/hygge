@@ -26,8 +26,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         try {
             foreach (Permission::all()->toArray() as $permission){
-                Gate::define($permission->name,function ($user) use($permission){
-                    return $user->can($permission->name);
+                Gate::define($permission["name"],function ($user) use($permission){
+                    return $user->can($permission["name"]);
                 });
             }
         }catch (\Exception $exception){
