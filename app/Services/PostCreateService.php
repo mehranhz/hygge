@@ -26,8 +26,7 @@ class PostCreateService implements PostCreateInterface
             return new PostCreateResponse($post->getID(), $post->getTitle(), $post->getBody(), $post->getAuthor()->getName());
         } catch (\Exception $exception) {
             Log::error($exception->getMessage());
-            $message = $exception->getMessage();
-            throw new ServiceCallException("failed to create new post: $message.", ErrorCode::Unknown->value, httpStatusCode: 500);
+            throw new ServiceCallException("failed to create new post.", ErrorCode::Unknown->value, httpStatusCode: 500);
         }
     }
 }
