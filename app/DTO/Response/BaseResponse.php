@@ -2,16 +2,11 @@
 
 namespace App\DTO\Response;
 
-use phpDocumentor\Reflection\Types\Self_;
 
 class BaseResponse
 {
     private array $array = [];
 
-    public function __construct()
-    {
-
-    }
 
     /**
      * @return array

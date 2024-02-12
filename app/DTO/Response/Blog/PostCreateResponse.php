@@ -12,12 +12,17 @@ class PostCreateResponse extends BaseResponse
     public string $body;
     public string $authorName;
 
-    public function __construct(int $id,string $title, string $body, string $authorName)
+    /**
+     * @param int $id
+     * @param string $title
+     * @param string $body
+     * @param string $authorName
+     */
+    public function __construct(int $id, string $title, string $body, string $authorName)
     {
         $this->id = $id;
         $this->title = $title;
         $this->body = $body;
         $this->authorName = $authorName;
-        parent::__construct();
     }
 }
