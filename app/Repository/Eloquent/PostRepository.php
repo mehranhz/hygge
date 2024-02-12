@@ -4,6 +4,7 @@ namespace App\Repository\Eloquent;
 
 
 use App\Models\Post;
+use App\Repository\PostRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 
 class PostRepository extends BaseRepository
@@ -16,8 +17,17 @@ class PostRepository extends BaseRepository
         parent::__construct($model);
     }
 
-    public function create(array $attributes): Model
+    /**
+     * @param Model $source
+     * @return \App\Entity\Post
+     */
+    public function convert(Model $source): \App\Entity\Post
     {
-        return auth()->user()->posts->create($attributes);
+        return new \App\Entity\Post($source->title,
+            $source->body,
+            $source->thumbnail,
+            $source->meta_description,
+            $source->meta_title,
+            $source->user->name);
     }
 }

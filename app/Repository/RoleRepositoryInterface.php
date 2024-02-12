@@ -2,6 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Role;
+use Illuminate\Database\Eloquent\Model;
+
 interface RoleRepositoryInterface extends EloquentRepositoryInterface
 {
     /**
@@ -10,4 +13,6 @@ interface RoleRepositoryInterface extends EloquentRepositoryInterface
      * @return void
      */
     public function givePermissionToRole(int $roleID, string $permissionName): void;
+
+    public function convert(Model $source): Role;
 }

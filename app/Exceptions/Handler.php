@@ -4,11 +4,24 @@ namespace App\Exceptions;
 
 use App\Http\Response\Response;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    private $validExceptions = [
+        AuthorizationException::class,
+        AuthenticationException::class,
+        ServiceCallException::class
+    ];
+
+    private $httpStatusCode = [
+        AuthorizationException::class => 403,
+        AuthenticationException::class => 401,
+        ServiceCallException::class => 500
+    ];
+
     /**
      * The list of the inputs that are never flashed to the session on validation exceptions.
      *
@@ -32,20 +45,27 @@ class Handler extends ExceptionHandler
 
     private function handleAPIException(Throwable $e)
     {
-        $response = new Response();
-        $response->setSuccess(false);
-        if (is_a($e, AuthorizationException::class)) {
-            $response->setHttpStatusCode(403);
-            $response->setErrorCode(403);
-            $response->setMessage('Action is unauthorized.');
-
-        }else{
-            $response->setHttpStatusCode(500);
-            $response->setMessage('Something went wrong!.');
-            $response->setErrorCode($e->getCode());
+        if (is_a($e, ServiceCallException::class)){
+            throw $e;
         }
 
+        $response = new Response();
+        $response->setSuccess(false);
+        foreach ($this->validExceptions as $exceptionType) {
+            if (is_a($e, $exceptionType)) {
+                $response->setErrorCode($e->getCode());
+                $response->setMessage($e->getMessage());
+                $response->setHttpStatusCode( $this->httpStatusCode[$exceptionType]);
+                return $response->getJSON();
+            }
+        }
+
+        $response->setHttpStatusCode(500);
+        $response->setMessage('Something went wrong!.');
+        $response->setErrorCode($e->getCode());
+
         return $response->getJSON();
+
     }
 
     public function render($request, Throwable $e)

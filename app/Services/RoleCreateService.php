@@ -31,8 +31,8 @@ class RoleCreateService implements RoleCreateInterface
     public function create(array $attributes): Role
     {
         try {
-            $role_instance = $this->roleRepository->create(['name' => $attributes['name']]);
-            return new Role($role_instance->name);
+            $role = $this->roleRepository->create(['name' => $attributes['name']]);
+            return $role;
         } catch (RoleAlreadyExists  $exception) {
             Log::error($exception->getMessage());
             throw new ServiceCallException("a role named $attributes[name] already exists", code: ErrorCode::SQLDuplicateEntry->value, httpStatusCode: 400, context: [

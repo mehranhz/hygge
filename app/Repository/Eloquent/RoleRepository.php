@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Repository\Paginatable;
 use App\Repository\RoleRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
@@ -31,5 +32,14 @@ class RoleRepository extends BaseRepository implements RoleRepositoryInterface
     {
         $role = $this->find($roleID);
         $role->givePermissionTo($permissionName);
+    }
+
+    /**
+     * @param Model $source
+     * @return \App\Entity\Role
+     */
+    public function convert(Model $source): \App\Entity\Role
+    {
+        return new \App\Entity\Role($source->name);
     }
 }

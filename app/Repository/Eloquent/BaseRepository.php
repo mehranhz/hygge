@@ -42,10 +42,14 @@ abstract class BaseRepository implements EloquentRepositoryInterface
      * @return Model
      * @throws RepositoryRecordCreationException
      */
-    public function create(array $attributes): Model
+    public function create(array $attributes): mixed
     {
         try {
             $instance = $this->model->create($attributes);
+            if (method_exists($this, 'convert')) {
+                return $this->convert($instance);
+            }
+
         } catch (UniqueConstraintViolationException $exception) {
             throw new RepositoryRecordCreationException(message: "duplicate entry", model: class_basename($this->model), code: ErrorCode::SQLDuplicateEntry->value);
         } catch (QueryException $exception) {
@@ -61,10 +65,10 @@ abstract class BaseRepository implements EloquentRepositoryInterface
      */
     public function find($id): ?Model
     {
-        $instance =  $this->model->find($id);
-        if ($instance === null){
-            $className= $this->getModelName();
-            throw new RecordsNotFoundException("there is no $className with provided id:$id",code: 404);
+        $instance = $this->model->find($id);
+        if ($instance === null) {
+            $className = $this->getModelName();
+            throw new RecordsNotFoundException("there is no $className with provided id:$id", code: 404);
         }
 
         return $instance;
