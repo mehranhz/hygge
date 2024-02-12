@@ -5,6 +5,7 @@ namespace App\Entity;
 class Post
 {
     /**
+     * @param int $id
      * @param string $title
      * @param string $body
      * @param string|null $thumbnail
@@ -13,6 +14,7 @@ class Post
      * @param User $author
      */
     public function __construct(
+        private int         $id,
         private string      $title,
         private string      $body,
         private string|null $thumbnail = null,
@@ -21,6 +23,14 @@ class Post
         private User        $author
     )
     {
+    }
+
+    /**
+     * @return int
+     */
+    public function getID(): int
+    {
+        return $this->id;
     }
 
     /**

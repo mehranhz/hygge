@@ -34,7 +34,9 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
      */
     public function convert(Model $source): \App\Entity\Post
     {
-        return new \App\Entity\Post($source->title,
+        return new \App\Entity\Post(
+            $source->id,
+            $source->title,
             $source->body,
             $source->thumbnail,
             $source->meta_description,

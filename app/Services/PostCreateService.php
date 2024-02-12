@@ -23,7 +23,7 @@ class PostCreateService implements PostCreateInterface
     {
         try {
             $post = $this->postRepository->create($attributes);
-            return new PostCreateResponse($post->getTitle(), $post->getBody(), $post->getAuthor()->getName());
+            return new PostCreateResponse($post->getID(), $post->getTitle(), $post->getBody(), $post->getAuthor()->getName());
         } catch (\Exception $exception) {
             Log::error($exception->getMessage());
             $message = $exception->getMessage();
