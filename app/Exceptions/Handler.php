@@ -96,11 +96,11 @@ class Handler extends ExceptionHandler
      * @throws ServiceCallException
      * @throws Throwable
      */
-    public function render($request, Throwable $e): JsonResponse|Response|RedirectResponse
-    {
-        if ($request->wantsJson()) {
-            return $this->handleAPIException($e);
-        }
-        return parent::render($request, $e);
-    }
+//    public function render($request, Throwable $e): JsonResponse|Response|RedirectResponse
+//    {
+//        if ($request->wantsJson()) {
+//            return $this->handleAPIException($e);
+//        }
+//        return parent::render($request, $e);
+//    }
 }

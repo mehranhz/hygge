@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('meta_description')->nullable();
             $table->smallInteger('read_time')->default(0);
             $table->smallInteger('like_count')->default(0);
+            $table->boolean('show_in_home')->default(false);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->softDeletes();

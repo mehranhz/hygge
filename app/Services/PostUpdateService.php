@@ -6,6 +6,7 @@ use App\Exceptions\ErrorCode;
 use App\Exceptions\ServiceCallException;
 use App\Repository\PostRepositoryInterface;
 use App\Services\Contracts\PostUpdateInterface;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\RecordsNotFoundException;
 
 class PostUpdateService implements PostUpdateInterface
@@ -30,6 +31,8 @@ class PostUpdateService implements PostUpdateInterface
                 return true;
             }
             throw new ServiceCallException('updating post failed.', ErrorCode::Unknown->value);
+        } catch (AuthorizationException $exception) {
+            throw new ServiceCallException('action is unauthorized', code: 403, httpStatusCode: 403);
         } catch (RecordsNotFoundException $exception) {
             throw new ServiceCallException($exception->getMessage(), ErrorCode::ResourceNotFound->value, httpStatusCode: 404);
         } catch (\Exception $exception) {

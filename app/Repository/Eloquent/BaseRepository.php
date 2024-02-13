@@ -7,10 +7,12 @@ use App\Exceptions\ErrorCode;
 use App\Exceptions\RepositoryRecordCreationException;
 use App\Repository\EloquentRepositoryInterface;
 use App\Repository\Paginatable;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 abstract class BaseRepository implements EloquentRepositoryInterface
@@ -77,6 +79,10 @@ abstract class BaseRepository implements EloquentRepositoryInterface
     public function update(int $id, array $attributes): bool
     {
         $instance = $this->find($id);
+        if (!Gate::allows('update', $instance)) {
+            throw new AuthorizationException('action is unauthorized', code: 403);
+        }
+
         $updateAttributes = [];
         foreach ($attributes as $key => $value) {
             if (in_array($key, $this->updateable)) {

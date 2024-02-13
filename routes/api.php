@@ -26,7 +26,7 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::post('/login-with-email', [\App\Http\Controllers\REST\Auth\AuthController::class, 'loginViaEmailAndPassword'])->name('login-with-email');
 
         // access control management routes
-        Route::middleware('auth:sanctum')->group(function () {
+        Route::middleware(['auth:sanctum','admin'])->group(function () {
             Route::post('/role', [\App\Http\Controllers\REST\Auth\RoleController::class, 'create'])->name('role.create');
             Route::get('/role', [\App\Http\Controllers\REST\Auth\RoleController::class, 'index'])->name('role.get');
             Route::post('/permission', [\App\Http\Controllers\REST\Auth\PermissionController::class, 'create'])->name('permission.create');
@@ -37,7 +37,7 @@ Route::prefix('v1')->name('v1.')->group(function () {
         });
     });
 
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware(['auth:sanctum','admin'])->group(function () {
         Route::resource('/post', \App\Http\Controllers\REST\Blog\PostController::class);
 
     });
