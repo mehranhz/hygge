@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PostRepository extends BaseRepository implements PostRepositoryInterface
 {
+    protected array $updateable = ["title","body"];
     /**
      * @param Post $model
      */

@@ -8,6 +8,8 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -20,7 +22,8 @@ class Handler extends ExceptionHandler
         AuthorizationException::class,
         AuthenticationException::class,
         ServiceCallException::class,
-        NotFoundHttpException::class
+        NotFoundHttpException::class,
+        MethodNotAllowedHttpException::class
     ];
 
     /**
@@ -30,7 +33,8 @@ class Handler extends ExceptionHandler
         AuthorizationException::class => 403,
         AuthenticationException::class => 401,
         ServiceCallException::class => 500,
-        NotFoundHttpException::class => 404
+        NotFoundHttpException::class => 404,
+        MethodNotAllowedHttpException::class => 405
     ];
 
     /**
@@ -62,7 +66,8 @@ class Handler extends ExceptionHandler
      */
     private function handleAPIException(Throwable $e): JsonResponse
     {
-        if (is_a($e, ServiceCallException::class)){
+        Log::error($e->getMessage(), context: $e->getTrace());
+        if (is_a($e, ServiceCallException::class)) {
             throw $e;
         }
 
@@ -72,7 +77,7 @@ class Handler extends ExceptionHandler
             if (is_a($e, $exceptionType)) {
                 $response->setErrorCode($e->getCode());
                 $response->setMessage($e->getMessage());
-                $response->setHttpStatusCode( $this->httpStatusCode[$exceptionType]);
+                $response->setHttpStatusCode($this->httpStatusCode[$exceptionType]);
                 return $response->getJSON();
             }
         }
@@ -91,7 +96,7 @@ class Handler extends ExceptionHandler
      * @throws ServiceCallException
      * @throws Throwable
      */
-    public function render($request, Throwable $e): JsonResponse | Response | RedirectResponse
+    public function render($request, Throwable $e): JsonResponse|Response|RedirectResponse
     {
         if ($request->wantsJson()) {
             return $this->handleAPIException($e);

@@ -8,6 +8,7 @@ use App\Services\Contracts\EmailVerificationInterface;
 use App\Services\Contracts\PermissionCreateInterface;
 use App\Services\Contracts\PermissionListInterface;
 use App\Services\Contracts\PostCreateInterface;
+use App\Services\Contracts\PostUpdateInterface;
 use App\Services\Contracts\RoleAssignmentInterface;
 use App\Services\Contracts\RoleCreateInterface;
 use App\Services\Contracts\RoleGivePermissionInterface;
@@ -18,6 +19,7 @@ use App\Services\EmailVerificationService;
 use App\Services\PermissionCreateService;
 use App\Services\PermissionListService;
 use App\Services\PostCreateService;
+use App\Services\PostUpdateService;
 use App\Services\RoleAssignmentService;
 use App\Services\RoleCreateService;
 use App\Services\RoleGivePermissionService;
@@ -44,6 +46,7 @@ class ServiceServiceProvider extends ServiceProvider
         $this->app->bind(RoleAssignmentInterface::class, RoleAssignmentService::class);
         $this->app->bind(RoleGivePermissionInterface::class, RoleGivePermissionService::class);
         $this->app->bind(PostCreateInterface::class, PostCreateService::class);
+        $this->app->bind(PostUpdateInterface::class, PostUpdateService::class);
     }
 
     /**

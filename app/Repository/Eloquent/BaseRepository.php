@@ -11,13 +11,22 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Facades\Log;
 
 abstract class BaseRepository implements EloquentRepositoryInterface
 {
     use Paginatable;
 
     protected Model $model;
+    /**
+     * @var array
+     */
     protected array $searchables = [];
+
+    /**
+     * @var array
+     */
+    protected array $updateable = [];
 
     /**
      * @param Model $model
@@ -57,6 +66,31 @@ abstract class BaseRepository implements EloquentRepositoryInterface
         }
 
         return $instance;
+    }
+
+
+    /**
+     * @param int $id
+     * @param array $attributes
+     * @return bool
+     */
+    public function update(int $id, array $attributes): bool
+    {
+        $instance = $this->find($id);
+        $updateAttributes = [];
+        foreach ($attributes as $key => $value) {
+            if (in_array($key, $this->updateable)) {
+                $updateAttributes[$key] = $value;
+            } else {
+
+                Log::warning("trying to update property $key when its not defined as an update-able property.", context: [
+                    "repository" => get_class($this),
+                    "method" => "update"
+                ]);
+            }
+        }
+
+        return $instance->update($updateAttributes);
     }
 
     /**

@@ -22,6 +22,7 @@ class ServiceCallException extends \Exception
         $this->httpStatusCode = $httpStatusCode;
 
         Log::error($message,context: $context);
+        Log::error("trace:", context: $this->getTrace());
     }
 
     /**

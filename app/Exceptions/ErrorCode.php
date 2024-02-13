@@ -16,5 +16,7 @@ enum ErrorCode: int
 
     // Resource not found
     case ResourceNotFound = 404;
+
+    case MethodNotAllowed = 405;
     case UserNotFound = 452;
 }
