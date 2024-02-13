@@ -40,6 +40,11 @@ class PostController extends APIController
         }
     }
 
+    /**
+     * @param int $id
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function update(int $id, Request $request): JsonResponse
     {
         try {
