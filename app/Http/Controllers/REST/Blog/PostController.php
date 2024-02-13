@@ -18,6 +18,7 @@ class PostController extends APIController
 
     /**
      * @param PostCreateInterface $postCreateService
+     * @param PostUpdateInterface $postUpdateService
      */
     public function __construct(PostCreateInterface $postCreateService, PostUpdateInterface $postUpdateService)
     {
