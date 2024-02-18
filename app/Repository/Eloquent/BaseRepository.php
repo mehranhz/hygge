@@ -4,6 +4,7 @@ namespace App\Repository\Eloquent;
 
 use App\DTO\PaginatedData;
 use App\Exceptions\ErrorCode;
+use App\Exceptions\RepositoryException;
 use App\Exceptions\RepositoryRecordCreationException;
 use App\Repository\EloquentRepositoryInterface;
 use App\Repository\Paginatable;
@@ -141,5 +142,23 @@ abstract class BaseRepository implements EloquentRepositoryInterface
 
         return new PaginatedData($data, $collection);
 
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getByID(int $id): mixed
+    {
+        try {
+            $instance = $this->find($id);
+            if (method_exists($this, 'convert')) {
+                return $this->convert($instance);
+            }
+            return $instance;
+        } catch (\Exception $exception) {
+            throw new RepositoryException(previous: $exception);
+        }
     }
 }

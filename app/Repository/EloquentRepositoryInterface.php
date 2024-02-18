@@ -42,4 +42,10 @@ interface EloquentRepositoryInterface
      * @return mixed
      */
     public function convert(Model $source): mixed;
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function getByID(int $id): mixed;
 }
