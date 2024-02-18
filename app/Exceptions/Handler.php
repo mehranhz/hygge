@@ -9,6 +9,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -23,7 +24,8 @@ class Handler extends ExceptionHandler
         AuthenticationException::class,
         ServiceCallException::class,
         NotFoundHttpException::class,
-        MethodNotAllowedHttpException::class
+        MethodNotAllowedHttpException::class,
+        ValidationException::class
     ];
 
     /**
@@ -34,7 +36,12 @@ class Handler extends ExceptionHandler
         AuthenticationException::class => 401,
         ServiceCallException::class => 500,
         NotFoundHttpException::class => 404,
-        MethodNotAllowedHttpException::class => 405
+        MethodNotAllowedHttpException::class => 405,
+        ValidationException::class => 400
+    ];
+
+    private array $errorCode = [
+        ValidationException::class => ErrorCode::ValidationError,
     ];
 
     /**
@@ -75,9 +82,13 @@ class Handler extends ExceptionHandler
         $response->setSuccess(false);
         foreach ($this->validExceptions as $exceptionType) {
             if (is_a($e, $exceptionType)) {
-                $response->setErrorCode($e->getCode());
+                $response->setErrorCode($this->errorCode[$exceptionType]->value ?? $e->getCode());
+
                 $response->setMessage($e->getMessage());
                 $response->setHttpStatusCode($this->httpStatusCode[$exceptionType]);
+                if (method_exists($e, 'errors')) {
+                    $response->setError($e->errors());
+                }
                 return $response->getJSON();
             }
         }
@@ -96,11 +107,11 @@ class Handler extends ExceptionHandler
      * @throws ServiceCallException
      * @throws Throwable
      */
-//    public function render($request, Throwable $e): JsonResponse|Response|RedirectResponse
-//    {
-//        if ($request->wantsJson()) {
-//            return $this->handleAPIException($e);
-//        }
-//        return parent::render($request, $e);
-//    }
+    public function render($request, Throwable $e): JsonResponse|Response|RedirectResponse
+    {
+        if ($request->wantsJson()) {
+            return $this->handleAPIException($e);
+        }
+        return parent::render($request, $e);
+    }
 }
