@@ -38,7 +38,7 @@ Route::prefix('v1')->name('v1.')->group(function () {
         });
     });
 
-    Route::middleware(['auth:sanctum','admin'])->group(function () {
+    Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::resource('/post', \App\Http\Controllers\REST\Blog\PostController::class);
 
     });

@@ -8,6 +8,7 @@ use App\Http\Controllers\APIController;
 use App\Http\Requests\REST\PostCreateRequest;
 use App\Models\Post;
 use App\Services\Contracts\PostCreateInterface;
+use App\Services\Contracts\PostListServiceInterface;
 use App\Services\Contracts\PostUpdateInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -19,20 +20,38 @@ class PostController extends APIController
     private PostCreateInterface $postCreateService;
     private PostUpdateInterface $postUpdateService;
 
+    private PostListServiceInterface $postListService;
+
     /**
      * @param PostCreateInterface $postCreateService
      * @param PostUpdateInterface $postUpdateService
+     * @param PostListServiceInterface $postListService
      */
-    public function __construct(PostCreateInterface $postCreateService, PostUpdateInterface $postUpdateService)
+    public function __construct(PostCreateInterface $postCreateService, PostUpdateInterface $postUpdateService, PostListServiceInterface $postListService)
     {
         parent::__construct();
         $this->postCreateService = $postCreateService;
         $this->postUpdateService = $postUpdateService;
+        $this->postListService = $postListService;
+    }
+
+
+    public function index(Request $request): JsonResponse
+    {
+        $collection = $this->postListService->find($request->toArray());
+        try {
+            return $this->respond(data: $collection->getData(),meta_data: [
+                "pagination" => $collection->getPaginationArray()
+            ]);
+        } catch (ServiceCallException $exception) {
+            return $this->respondFromServiceCallException($exception);
+        }
     }
 
     /**
      * @param PostCreateRequest $request
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function store(PostCreateRequest $request): JsonResponse
     {
