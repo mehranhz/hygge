@@ -24,9 +24,10 @@ Route::prefix('v1')->name('v1.')->group(function () {
         // user registration and authentication routes
         Route::post('/register', [\App\Http\Controllers\REST\Auth\AuthController::class, 'selfRegister'])->name('register');
         Route::post('/login-with-email', [\App\Http\Controllers\REST\Auth\AuthController::class, 'loginViaEmailAndPassword'])->name('login-with-email');
+        Route::middleware(['auth:sanctum'])->get('/me', [\App\Http\Controllers\REST\ProfileController::class, 'myData']);
 
         // access control management routes
-        Route::middleware(['auth:sanctum','admin'])->group(function () {
+        Route::middleware(['auth:sanctum', 'admin'])->group(function () {
             Route::post('/role', [\App\Http\Controllers\REST\Auth\RoleController::class, 'create'])->name('role.create');
             Route::get('/role', [\App\Http\Controllers\REST\Auth\RoleController::class, 'index'])->name('role.get');
             Route::post('/permission', [\App\Http\Controllers\REST\Auth\PermissionController::class, 'create'])->name('permission.create');
