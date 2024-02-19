@@ -107,7 +107,7 @@ class Handler extends ExceptionHandler
      * @throws ServiceCallException
      * @throws Throwable
      */
-    public function render($request, Throwable $e): JsonResponse|Response|RedirectResponse
+    public function render($request, Throwable $e): mixed
     {
         if ($request->wantsJson()) {
             return $this->handleAPIException($e);
