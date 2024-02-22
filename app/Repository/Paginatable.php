@@ -11,10 +11,10 @@ trait Paginatable
     public function makePaginationParams(array $query): array
     {
         return [
-            $query['perPage'] ?? 10,
+            $query['pageSize'] ?? 10,
             ['*'],
             'page',
-            $query['pageNumber'] ?? 1
+            $query['page'] ?? 1
         ];
     }
 }
