@@ -23,7 +23,9 @@ class PostCreateRequest extends FormRequest
     {
         return [
             "title" => ['required'],
-            "body" => ['required']
+            "thumbnail" => ["required"],
+            "body" => ['required'],
+            "read_time" => ['required', 'numeric', 'min:0']
         ];
     }
 }
