@@ -12,6 +12,7 @@ use App\Services\Contracts\PostListServiceInterface;
 class PostListService implements PostListServiceInterface
 {
     private PostRepositoryInterface $postRepository;
+
     public function __construct(PostRepositoryInterface $postRepository)
     {
         $this->postRepository = $postRepository;
