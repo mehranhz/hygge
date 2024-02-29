@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PostRepository extends BaseRepository implements PostRepositoryInterface
 {
-    protected array $updateable = ["title", "body"];
+    protected array $updateable = ["title", "body","read_time","meta_title","meta_description","thumbnail"];
 
     /**
      * @param Post $model
@@ -47,7 +47,8 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
             new User(
                 $source->user->name,
                 $source->user->email,
-            )
+            ),
+            $source->read_time
         );
     }
 

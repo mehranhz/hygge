@@ -9,6 +9,7 @@ use App\Services\Contracts\PermissionCreateInterface;
 use App\Services\Contracts\PermissionListInterface;
 use App\Services\Contracts\PostCreateInterface;
 use App\Services\Contracts\PostListServiceInterface;
+use App\Services\Contracts\PostServiceInterface;
 use App\Services\Contracts\PostUpdateInterface;
 use App\Services\Contracts\RoleAssignmentInterface;
 use App\Services\Contracts\RoleCreateInterface;
@@ -22,6 +23,7 @@ use App\Services\PermissionCreateService;
 use App\Services\PermissionListService;
 use App\Services\PostCreateService;
 use App\Services\PostListService;
+use App\Services\PostService;
 use App\Services\PostUpdateService;
 use App\Services\RoleAssignmentService;
 use App\Services\RoleCreateService;
@@ -53,6 +55,7 @@ class ServiceServiceProvider extends ServiceProvider
         $this->app->bind(PostUpdateInterface::class, PostUpdateService::class);
         $this->app->bind(UserProfileServiceInterface::class, UserProfileService::class);
         $this->app->bind(PostListServiceInterface::class,PostListService::class);
+        $this->app->bind(PostServiceInterface::class, PostService::class);
     }
 
     /**

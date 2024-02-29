@@ -9,7 +9,9 @@ use App\Http\Requests\REST\PostCreateRequest;
 use App\Models\Post;
 use App\Services\Contracts\PostCreateInterface;
 use App\Services\Contracts\PostListServiceInterface;
+use App\Services\Contracts\PostServiceInterface;
 use App\Services\Contracts\PostUpdateInterface;
+use App\Services\PostService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,17 +24,26 @@ class PostController extends APIController
 
     private PostListServiceInterface $postListService;
 
+    private PostService $postService;
+
     /**
      * @param PostCreateInterface $postCreateService
      * @param PostUpdateInterface $postUpdateService
      * @param PostListServiceInterface $postListService
+     * @param PostServiceInterface $postService
      */
-    public function __construct(PostCreateInterface $postCreateService, PostUpdateInterface $postUpdateService, PostListServiceInterface $postListService)
+    public function __construct(
+        PostCreateInterface      $postCreateService,
+        PostUpdateInterface      $postUpdateService,
+        PostListServiceInterface $postListService,
+        PostServiceInterface     $postService
+    )
     {
         parent::__construct();
         $this->postCreateService = $postCreateService;
         $this->postUpdateService = $postUpdateService;
         $this->postListService = $postListService;
+        $this->postService = $postService;
     }
 
 
@@ -40,7 +51,7 @@ class PostController extends APIController
     {
         $collection = $this->postListService->find($request->toArray());
         try {
-            return $this->respond(data: $collection->getData(),meta_data: [
+            return $this->respond(data: $collection->getData(), meta_data: [
                 "pagination" => $collection->getPaginationArray()
             ]);
         } catch (ServiceCallException $exception) {
@@ -70,7 +81,7 @@ class PostController extends APIController
      * @param Request $request
      * @return JsonResponse
      */
-    public function update(int $id, Request $request)
+    public function update(int $id, Request $request): JsonResponse
     {
         Gate::authorize('update post');
 
@@ -79,6 +90,21 @@ class PostController extends APIController
                 return $this->respond(message: 'post updated successfully.');
             }
             throw new ServiceCallException('updating post failed.', ErrorCode::Unknown->value);
+        } catch (ServiceCallException $exception) {
+            return $this->respondFromServiceCallException($exception);
+        }
+    }
+
+    /**
+     * @param int $ID
+     * @return JsonResponse
+     */
+    public function show(int $ID): JsonResponse
+    {
+        try {
+            return $this->respond(
+                data: $this->postService->findByID($ID)->toArray()
+            );
         } catch (ServiceCallException $exception) {
             return $this->respondFromServiceCallException($exception);
         }
