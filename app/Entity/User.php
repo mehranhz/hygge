@@ -10,8 +10,8 @@ class User
 
     public function __construct(
         protected string      $name,
-        public string         $email,
-        protected string      $phone,
+        public string|null    $email = null,
+        protected string|null $phone = null,
         protected string|null $verificationDate = null,
         protected string|null $password = null,
     )
@@ -48,7 +48,7 @@ class User
         return $this->verificationDate;
     }
 
-    public function getPassword():string|null
+    public function getPassword(): string|null
     {
         return $this->password;
     }

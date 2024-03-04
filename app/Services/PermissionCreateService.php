@@ -31,11 +31,9 @@ class PermissionCreateService implements PermissionCreateInterface
     public function create(array $attributes): Permission
     {
         try {
-            $permission_model_instance = $this->permissionRepository->create([
+            return $this->permissionRepository->create([
                 "name" => $attributes["name"]
             ]);
-
-            return new Permission($permission_model_instance->name);
         } catch (PermissionAlreadyExists $exception) {
             Log::error($exception->getMessage());
             throw new ServiceCallException("a permission named $attributes[name] already exists", code: ErrorCode::SQLDuplicateEntry->value, httpStatusCode: 400, context: [

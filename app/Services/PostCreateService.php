@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Services;
+
+use App\DTO\Response\Blog\PostCreateResponse;
+use App\Exceptions\ErrorCode;
+use App\Exceptions\ServiceCallException;
+use App\Repository\PostRepositoryInterface;
+use App\Services\Contracts\PostCreateInterface;
+use Illuminate\Support\Facades\Log;
+
+class PostCreateService implements PostCreateInterface
+{
+    private PostRepositoryInterface $postRepository;
+
+    /**
+     * @param PostRepositoryInterface $postRepository
+     */
+    public function __construct(PostRepositoryInterface $postRepository)
+    {
+        $this->postRepository = $postRepository;
+    }
+
+    /**
+     * @param array $attributes
+     * @return PostCreateResponse
+     * @throws ServiceCallException
+     */
+    public function create(array $attributes): PostCreateResponse
+    {
+        try {
+            $post = $this->postRepository->create($attributes);
+            return new PostCreateResponse($post->getID(), $post->getTitle(), $post->getBody(), $post->getAuthor()->getName());
+        } catch (\Exception $exception) {
+            Log::error($exception->getMessage());
+            throw new ServiceCallException("failed to create new post.", ErrorCode::Unknown->value, httpStatusCode: 500);
+        }
+    }
+}

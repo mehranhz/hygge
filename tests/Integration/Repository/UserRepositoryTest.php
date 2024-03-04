@@ -24,9 +24,9 @@ class UserRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function create_method_returns_an_eloquent_user_instance()
+    public function create_method_returns_a_user_instance()
     {
-        $this->assertEquals(\App\Models\User::class,get_class($this->user));
+        $this->assertEquals(\App\Entity\User::class,get_class($this->user));
     }
 
     /** @test */

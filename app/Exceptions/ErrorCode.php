@@ -15,6 +15,10 @@ enum ErrorCode: int
 
 
     // Resource not found
+
+    case ValidationError = 422;
     case ResourceNotFound = 404;
+
+    case MethodNotAllowed = 405;
     case UserNotFound = 452;
 }

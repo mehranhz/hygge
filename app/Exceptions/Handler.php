@@ -4,11 +4,46 @@ namespace App\Exceptions;
 
 use App\Http\Response\Response;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    /**
+     * @var string[]
+     */
+    private array $validExceptions = [
+        AuthorizationException::class,
+        AuthenticationException::class,
+        ServiceCallException::class,
+        NotFoundHttpException::class,
+        MethodNotAllowedHttpException::class,
+        ValidationException::class
+    ];
+
+    /**
+     * @var int[]
+     */
+    private array $httpStatusCode = [
+        AuthorizationException::class => 403,
+        AuthenticationException::class => 401,
+        ServiceCallException::class => 500,
+        NotFoundHttpException::class => 404,
+        MethodNotAllowedHttpException::class => 405,
+        ValidationException::class => 400
+    ];
+
+    private array $errorCode = [
+        ValidationException::class => ErrorCode::ValidationError,
+    ];
+
     /**
      * The list of the inputs that are never flashed to the session on validation exceptions.
      *
@@ -30,25 +65,49 @@ class Handler extends ExceptionHandler
         });
     }
 
-    private function handleAPIException(Throwable $e)
+    /**
+     * @param Throwable $e
+     * @return JsonResponse
+     * @throws ServiceCallException
+     * @throws Throwable
+     */
+    private function handleAPIException(Throwable $e): JsonResponse
     {
-        $response = new Response();
-        $response->setSuccess(false);
-        if (is_a($e, AuthorizationException::class)) {
-            $response->setHttpStatusCode(403);
-            $response->setErrorCode(403);
-            $response->setMessage('Action is unauthorized.');
-
-        }else{
-            $response->setHttpStatusCode(500);
-            $response->setMessage('Something went wrong!.');
-            $response->setErrorCode($e->getCode());
+        Log::error($e->getMessage(), context: $e->getTrace());
+        if (is_a($e, ServiceCallException::class)) {
+            throw $e;
         }
 
+        $response = new Response();
+        $response->setSuccess(false);
+        foreach ($this->validExceptions as $exceptionType) {
+            if (is_a($e, $exceptionType)) {
+                $response->setErrorCode($this->errorCode[$exceptionType]->value ?? $e->getCode());
+
+                $response->setMessage($e->getMessage());
+                $response->setHttpStatusCode($this->httpStatusCode[$exceptionType]);
+                if (method_exists($e, 'errors')) {
+                    $response->setError($e->errors());
+                }
+                return $response->getJSON();
+            }
+        }
+        $response->setHttpStatusCode(500);
+        $response->setMessage('Something went wrong!.');
+        $response->setErrorCode($e->getCode());
+
         return $response->getJSON();
+
     }
 
-    public function render($request, Throwable $e)
+    /**
+     * @param $request
+     * @param Throwable $e
+     * @return JsonResponse|Response|RedirectResponse
+     * @throws ServiceCallException
+     * @throws Throwable
+     */
+    public function render($request, Throwable $e): mixed
     {
         if ($request->wantsJson()) {
             return $this->handleAPIException($e);

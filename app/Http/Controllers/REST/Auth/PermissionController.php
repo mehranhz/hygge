@@ -37,7 +37,9 @@ class PermissionController extends APIController
         try {
             $permissionsCollection = $this->permissionListService->find($request->toArray());
 
-            return $this->respond(data: $permissionsCollection->getData(), meta_data: $permissionsCollection->getPaginationArray());
+            return $this->respond(data: $permissionsCollection->getData(), meta_data: [
+                "pagination" => $permissionsCollection->getPaginationArray()
+            ]);
         } catch (ServiceCallException $exception) {
             return $this->respondFromServiceCallException($exception);
         }
