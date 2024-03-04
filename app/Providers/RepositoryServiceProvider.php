@@ -4,12 +4,14 @@ namespace App\Providers;
 
 use App\Repository\Eloquent\BaseRepository;
 use App\Repository\Eloquent\EmailVerificationTokenRepository;
+use App\Repository\Eloquent\FAQRepository;
 use App\Repository\Eloquent\PermissionRepository;
 use App\Repository\Eloquent\PostRepository;
 use App\Repository\Eloquent\RoleRepository;
 use App\Repository\Eloquent\UserRepository;
 use App\Repository\EloquentRepositoryInterface;
 use App\Repository\EmailVerificationTokenRepositoryInterface;
+use App\Repository\FAQRepositoryInterface;
 use App\Repository\PermissionRepositoryInterface;
 use App\Repository\PostRepositoryInterface;
 use App\Repository\RoleRepositoryInterface;
@@ -29,6 +31,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(RoleRepositoryInterface::class, RoleRepository::class);
         $this->app->bind(PermissionRepositoryInterface::class,PermissionRepository::class);
         $this->app->bind(PostRepositoryInterface::class, PostRepository::class);
+        $this->app->bind(FAQRepositoryInterface::class, FAQRepository::class);
     }
 
     /**
