@@ -67,4 +67,17 @@ class CategoryService implements CategoryServiceInterface
         }
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     * @throws ServiceCallException
+     */
+    public function delete(int $id): bool
+    {
+        try {
+            return $this->categoryRepository->delete($id);
+        }catch (RepositoryException $exception){
+            throw new ServiceCallException($exception->getMessage(),$exception->getCode());
+        }
+    }
 }

@@ -9,19 +9,30 @@ class ServiceCallException extends \Exception
 {
     private int $httpStatusCode;
 
+    private $validErrorCodesAsHttpStatusCode = [
+        404,
+        401,
+        403,
+        400
+    ];
+
     /**
      * @param string $message
      * @param int $code
      * @param Throwable|null $previous
-     * @param int $httpStatusCode
+     * @param int|null $httpStatusCode
      * @param array $context context is used to provide more info for logging - do not pass any confidential data
      */
-    public function __construct(string $message = "", int $code = 0, ?Throwable $previous = null, int $httpStatusCode = 500, array $context = [])
+    public function __construct(string $message = "", int $code = 0, ?Throwable $previous = null, ?int $httpStatusCode = null, array $context = [])
     {
         parent::__construct($message, $code, $previous);
-        $this->httpStatusCode = $httpStatusCode;
+        if ($httpStatusCode === null && in_array($code, $this->validErrorCodesAsHttpStatusCode)) {
+            $this->httpStatusCode = $code;
+        } else {
+            $this->httpStatusCode = $httpStatusCode === null ? 500 : $httpStatusCode;
+        }
 
-        Log::error($message,context: $context);
+        Log::error($message, context: $context);
         Log::error("trace:", context: $this->getTrace());
     }
 
