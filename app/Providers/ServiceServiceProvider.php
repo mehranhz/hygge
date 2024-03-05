@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Services\AuthenticateViaEmailAndPasswordService;
+use App\Services\CategoryService;
 use App\Services\Contracts\AuthenticationInterface;
+use App\Services\Contracts\CategoryServiceInterface;
 use App\Services\Contracts\EmailVerificationInterface;
 use App\Services\Contracts\FAQServiceInterface;
 use App\Services\Contracts\PermissionCreateInterface;
@@ -59,6 +61,7 @@ class ServiceServiceProvider extends ServiceProvider
         $this->app->bind(PostListServiceInterface::class,PostListService::class);
         $this->app->bind(PostServiceInterface::class, PostService::class);
         $this->app->bind(FAQServiceInterface::class, FAQService::class);
+        $this->app->bind(CategoryServiceInterface::class, CategoryService::class);
     }
 
     /**

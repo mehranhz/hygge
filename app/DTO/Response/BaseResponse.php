@@ -3,7 +3,7 @@
 namespace App\DTO\Response;
 
 
-class BaseResponse
+class BaseResponse implements BaseResponseInterface
 {
     private array $array = [];
 

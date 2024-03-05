@@ -65,7 +65,9 @@ abstract class BaseRepository implements EloquentRepositoryInterface
         } catch (UniqueConstraintViolationException $exception) {
             throw new RepositoryRecordCreationException(message: "duplicate entry", model: class_basename($this->model), code: ErrorCode::SQLDuplicateEntry->value);
         } catch (QueryException $exception) {
-            throw new RepositoryRecordCreationException(message: "unknown", model: class_basename($this->model), code: ErrorCode::Unknown->value);
+            throw new RepositoryRecordCreationException(message: $exception->getMessage(), model: class_basename($this->model), code: ErrorCode::Unknown->value);
+        }catch (\Exception $exception){
+            throw new RepositoryException($exception->getMessage());
         }
 
         return $instance;
