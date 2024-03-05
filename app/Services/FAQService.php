@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\DTO\PaginatedData;
-use App\DTO\Response\BaseResponse;
 use App\DTO\Response\FAQ\FAQCreateResponse;
 use App\Exceptions\RepositoryException;
 use App\Exceptions\ServiceCallException;
