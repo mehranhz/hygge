@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\DTO\PaginatedData;
+use App\Exceptions\RepositoryException;
 use Illuminate\Database\Eloquent\Model;
 
 interface EloquentRepositoryInterface
@@ -48,4 +49,11 @@ interface EloquentRepositoryInterface
      * @return mixed
      */
     public function getByID(int $id): mixed;
+
+    /**
+     * @param int $id
+     * @return bool
+     * @throws RepositoryException
+     */
+    public function delete(int $id):bool;
 }

@@ -11,6 +11,7 @@ use App\Services\Contracts\FAQServiceInterface;
 use App\Services\Contracts\PermissionCreateInterface;
 use App\Services\Contracts\PermissionListInterface;
 use App\Services\Contracts\PostCreateInterface;
+use App\Services\Contracts\PostDeleteServiceInterface;
 use App\Services\Contracts\PostListServiceInterface;
 use App\Services\Contracts\PostServiceInterface;
 use App\Services\Contracts\PostUpdateInterface;
@@ -26,6 +27,7 @@ use App\Services\FAQService;
 use App\Services\PermissionCreateService;
 use App\Services\PermissionListService;
 use App\Services\PostCreateService;
+use App\Services\PostDeleteService;
 use App\Services\PostListService;
 use App\Services\PostService;
 use App\Services\PostUpdateService;
@@ -62,6 +64,7 @@ class ServiceServiceProvider extends ServiceProvider
         $this->app->bind(PostServiceInterface::class, PostService::class);
         $this->app->bind(FAQServiceInterface::class, FAQService::class);
         $this->app->bind(CategoryServiceInterface::class, CategoryService::class);
+        $this->app->bind(PostDeleteServiceInterface::class, PostDeleteService::class);
     }
 
     /**

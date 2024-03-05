@@ -66,7 +66,7 @@ abstract class BaseRepository implements EloquentRepositoryInterface
             throw new RepositoryRecordCreationException(message: "duplicate entry", model: class_basename($this->model), code: ErrorCode::SQLDuplicateEntry->value);
         } catch (QueryException $exception) {
             throw new RepositoryRecordCreationException(message: $exception->getMessage(), model: class_basename($this->model), code: ErrorCode::Unknown->value);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             throw new RepositoryException($exception->getMessage());
         }
 
@@ -106,13 +106,14 @@ abstract class BaseRepository implements EloquentRepositoryInterface
     /**
      * @param $id
      * @return Model|null
+     * @throws RepositoryException
      */
     public function find($id): ?Model
     {
         $instance = $this->model->find($id);
         if ($instance === null) {
             $className = $this->getModelName();
-            throw new RecordsNotFoundException("there is no $className with provided id:$id", code: 404);
+            throw new RepositoryException("there is no $className with provided id:$id", code: 404);
         }
 
         return $instance;
@@ -163,5 +164,19 @@ abstract class BaseRepository implements EloquentRepositoryInterface
         } catch (\Exception $exception) {
             throw new RepositoryException(previous: $exception);
         }
+    }
+
+    /**
+     * @param int $id
+     * @return bool|null
+     * @throws RepositoryException
+     */
+    public function delete(int $id): bool
+    {
+        $instance = $this->find($id);
+        if ($instance) {
+            return $instance->delete();
+        }
+        throw new RepositoryException("there is no record with id $id.",404);
     }
 }
