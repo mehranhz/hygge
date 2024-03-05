@@ -9,6 +9,7 @@ use App\Entity\FAQ;
 
 class FAQRepository extends BaseRepository implements FAQRepositoryInterface
 {
+    protected array  $updateable = ['title', 'description', 'visibility'];
     public function __construct(FAQModel $model)
     {
         parent::__construct($model);

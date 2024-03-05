@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\DTO\PaginatedData;
+use App\DTO\Response\BaseResponse;
 use App\DTO\Response\FAQ\FAQCreateResponse;
-use App\DTO\Response\FAQ\FAQListResponse;
 use App\Exceptions\RepositoryException;
 use App\Exceptions\ServiceCallException;
 use App\Repository\FAQRepositoryInterface;
@@ -38,7 +38,7 @@ class FAQService implements FAQServiceInterface
                 $instance->getDescription(),
                 $instance->getVisibility()
             );
-        }catch (RepositoryException $exception){
+        } catch (RepositoryException $exception) {
             throw new ServiceCallException("error while trying to insert new faq record");
         }
     }
@@ -52,7 +52,16 @@ class FAQService implements FAQServiceInterface
     {
         try {
             return $this->FAQRepository->get($filters);
-        }catch (RepositoryException $exception){
+        } catch (RepositoryException $exception) {
+            throw new ServiceCallException();
+        }
+    }
+
+    public function update(int $id, array $attributes): bool
+    {
+        try {
+            return $this->FAQRepository->update($id, $attributes);
+        } catch (RepositoryException $exception) {
             throw new ServiceCallException();
         }
     }

@@ -44,10 +44,26 @@ class FAQController extends APIController
      */
     public function store(FAQCreateRequest $request): JsonResponse
     {
+        $this->authorize('create faq');
         try {
             return $this->createdSuccessfullyRespond(
                 data: $this->FAQService->create($request->toArray())->toArray()
             );
+        } catch (ServiceCallException $exception) {
+            return $this->respondFromServiceCallException($exception);
+        }
+    }
+
+    public function update(Request $request, int $id)
+    {
+        $this->authorize('update faq');
+        try {
+            if ($this->FAQService->update($id, $request->toArray())) {
+                return $this->respond(
+                    message: __('FAQ updated successfully')
+                );
+            }
+            throw new ServiceCallException("unknown error while trying to update faq");
         } catch (ServiceCallException $exception) {
             return $this->respondFromServiceCallException($exception);
         }
