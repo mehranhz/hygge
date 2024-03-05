@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->tinyText('description')->nullable();
-            $table->unsignedBigInteger('thumbnail')->nullable();
-            $table->foreign('thumbnail')->references('id')->on('media')->restrictOnDelete();
+            $table->string("thumbnail")->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->restrictOnDelete();
             $table->softDeletes();

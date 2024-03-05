@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Repository\CategoryRepositoryInterface;
 use App\Repository\Eloquent\BaseRepository;
+use App\Repository\Eloquent\CategoryRepository;
 use App\Repository\Eloquent\EmailVerificationTokenRepository;
 use App\Repository\Eloquent\FAQRepository;
 use App\Repository\Eloquent\PermissionRepository;
@@ -32,6 +34,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PermissionRepositoryInterface::class,PermissionRepository::class);
         $this->app->bind(PostRepositoryInterface::class, PostRepository::class);
         $this->app->bind(FAQRepositoryInterface::class, FAQRepository::class);
+        $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
     }
 
     /**

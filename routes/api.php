@@ -42,6 +42,7 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::resource('/post', \App\Http\Controllers\REST\Blog\PostController::class);
         Route::post('/post/save-thumbnail',[\App\Http\Controllers\REST\Blog\ThumbnailController::class,'save'])->name('name.save-thumbnail');
         Route::resource('/faq',\App\Http\Controllers\REST\FAQController::class);
+        Route::resource('/category',\App\Http\Controllers\REST\CategoryController::class);
 
     });
 });
