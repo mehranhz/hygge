@@ -6,7 +6,6 @@ use App\Exceptions\ErrorCode;
 use App\Exceptions\ServiceCallException;
 use App\Http\Controllers\APIController;
 use App\Http\Requests\REST\PostCreateRequest;
-use App\Models\Post;
 use App\Services\Contracts\PostCreateInterface;
 use App\Services\Contracts\PostListServiceInterface;
 use App\Services\Contracts\PostServiceInterface;

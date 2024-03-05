@@ -76,6 +76,7 @@ abstract class BaseRepository implements EloquentRepositoryInterface
      * @param int $id
      * @param array $attributes
      * @return bool
+     * @throws AuthorizationException
      */
     public function update(int $id, array $attributes): bool
     {

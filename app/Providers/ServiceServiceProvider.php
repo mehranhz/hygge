@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Services\AuthenticateViaEmailAndPasswordService;
 use App\Services\Contracts\AuthenticationInterface;
 use App\Services\Contracts\EmailVerificationInterface;
+use App\Services\Contracts\FAQServiceInterface;
 use App\Services\Contracts\PermissionCreateInterface;
 use App\Services\Contracts\PermissionListInterface;
 use App\Services\Contracts\PostCreateInterface;
@@ -19,6 +20,7 @@ use App\Services\Contracts\UserProfileServiceInterface;
 use App\Services\Contracts\UserRegistrationInterface;
 use App\Services\Contracts\UserServiceInterface;
 use App\Services\EmailVerificationService;
+use App\Services\FAQService;
 use App\Services\PermissionCreateService;
 use App\Services\PermissionListService;
 use App\Services\PostCreateService;
@@ -56,6 +58,7 @@ class ServiceServiceProvider extends ServiceProvider
         $this->app->bind(UserProfileServiceInterface::class, UserProfileService::class);
         $this->app->bind(PostListServiceInterface::class,PostListService::class);
         $this->app->bind(PostServiceInterface::class, PostService::class);
+        $this->app->bind(FAQServiceInterface::class, FAQService::class);
     }
 
     /**
