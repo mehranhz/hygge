@@ -23,7 +23,8 @@ class CategoryController extends APIController
      * @param Request $request
      * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse{
+    public function index(Request $request): JsonResponse
+    {
         $categories = $this->categoryService->get($request->toArray());
         try {
             return $this->respond(
@@ -32,7 +33,7 @@ class CategoryController extends APIController
                     "pagination" => $categories->getPaginationArray()
                 ]
             );
-        }catch (ServiceCallException $exception){
+        } catch (ServiceCallException $exception) {
             return $this->respondFromServiceCallException($exception);
         }
     }
@@ -46,7 +47,7 @@ class CategoryController extends APIController
         try {
             return $this->createdSuccessfullyRespond(
                 data: $this->categoryService->create($request->toArray())->toArray()
-        );
+            );
         } catch (ServiceCallException $exception) {
             return $this->respondFromServiceCallException($exception);
         }
@@ -57,14 +58,33 @@ class CategoryController extends APIController
      * @param int $id
      * @return JsonResponse|void
      */
-    public function update(Request $request, int $id){
+    public function update(Request $request, int $id)
+    {
         try {
-            if ($this->categoryService->update($id,$request->toArray())){
+            if ($this->categoryService->update($id, $request->toArray())) {
                 return $this->respond(
                     message: __("category updated successfully")
                 );
             }
-        }catch (ServiceCallException $exception){
+        } catch (ServiceCallException $exception) {
+            return $this->respondFromServiceCallException($exception);
+        }
+    }
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        try {
+            if ($this->categoryService->delete($id)) {
+                return $this->respond(
+                    message: "category deleted successfully"
+                );
+            }
+            throw new ServiceCallException("unknown error while trying to delete category with id $id");
+        } catch (ServiceCallException $exception) {
             return $this->respondFromServiceCallException($exception);
         }
     }

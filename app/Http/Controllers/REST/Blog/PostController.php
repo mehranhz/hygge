@@ -7,10 +7,10 @@ use App\Exceptions\ServiceCallException;
 use App\Http\Controllers\APIController;
 use App\Http\Requests\REST\PostCreateRequest;
 use App\Services\Contracts\PostCreateInterface;
+use App\Services\Contracts\PostDeleteServiceInterface;
 use App\Services\Contracts\PostListServiceInterface;
 use App\Services\Contracts\PostServiceInterface;
 use App\Services\Contracts\PostUpdateInterface;
-use App\Services\PostService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -23,7 +23,8 @@ class PostController extends APIController
 
     private PostListServiceInterface $postListService;
 
-    private PostService $postService;
+    private PostServiceInterface $postService;
+    private PostDeleteServiceInterface $postDeleteService;
 
     /**
      * @param PostCreateInterface $postCreateService
@@ -32,10 +33,11 @@ class PostController extends APIController
      * @param PostServiceInterface $postService
      */
     public function __construct(
-        PostCreateInterface      $postCreateService,
-        PostUpdateInterface      $postUpdateService,
-        PostListServiceInterface $postListService,
-        PostServiceInterface     $postService
+        PostCreateInterface        $postCreateService,
+        PostUpdateInterface        $postUpdateService,
+        PostListServiceInterface   $postListService,
+        PostServiceInterface       $postService,
+        PostDeleteServiceInterface $postDeleteService
     )
     {
         parent::__construct();
@@ -43,6 +45,7 @@ class PostController extends APIController
         $this->postUpdateService = $postUpdateService;
         $this->postListService = $postListService;
         $this->postService = $postService;
+        $this->postDeleteService = $postDeleteService;
     }
 
 
@@ -104,6 +107,22 @@ class PostController extends APIController
             return $this->respond(
                 data: $this->postService->findByID($ID)->toArray()
             );
+        } catch (ServiceCallException $exception) {
+            return $this->respondFromServiceCallException($exception);
+        }
+    }
+
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        try {
+            if ($this->postDeleteService->delete($id)) {
+                return $this->respond(message: __("post have been deleted successfully."));
+            }
+            throw new ServiceCallException("unknown error while trying to delete post with id $id");
         } catch (ServiceCallException $exception) {
             return $this->respondFromServiceCallException($exception);
         }

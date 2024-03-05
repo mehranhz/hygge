@@ -56,12 +56,32 @@ class FAQService implements FAQServiceInterface
         }
     }
 
+    /**
+     * @param int $id
+     * @param array $attributes
+     * @return bool
+     * @throws ServiceCallException
+     */
     public function update(int $id, array $attributes): bool
     {
         try {
             return $this->FAQRepository->update($id, $attributes);
         } catch (RepositoryException $exception) {
             throw new ServiceCallException();
+        }
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     * @throws ServiceCallException
+     */
+    public function delete(int $id): bool
+    {
+        try {
+            return $this->FAQRepository->delete($id);
+        } catch (RepositoryException $exception) {
+            throw new ServiceCallException($exception->getMessage(), $exception->getCode());
         }
     }
 }
