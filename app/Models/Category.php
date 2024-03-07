@@ -12,4 +12,7 @@ class Category extends Model
     use SoftDeletes;
 
     protected $fillable = ['title', 'description', 'thumbnail', 'user_id'];
+
+    protected $hidden = ["user_id","deleted_at","created_at","updated_at"];
+
 }
