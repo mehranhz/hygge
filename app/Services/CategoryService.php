@@ -5,6 +5,7 @@ namespace App\Services;
 use App\DTO\PaginatedData;
 use App\DTO\Response\BaseResponse;
 use App\DTO\Response\Category\CategoryCreateResponse;
+use App\DTO\Response\Category\CategoryResponse;
 use App\Exceptions\RepositoryException;
 use App\Exceptions\ServiceCallException;
 use App\Repository\CategoryRepositoryInterface;
@@ -52,8 +53,8 @@ class CategoryService implements CategoryServiceInterface
     public function update(int $id, array $attributes): bool
     {
         try {
-            return $this->categoryRepository->update($id,$attributes);
-        }catch (RepositoryException $exception){
+            return $this->categoryRepository->update($id, $attributes);
+        } catch (RepositoryException $exception) {
             throw new ServiceCallException($exception->getMessage());
         }
     }
@@ -62,7 +63,7 @@ class CategoryService implements CategoryServiceInterface
     {
         try {
             return $this->categoryRepository->get($query);
-        }catch (RepositoryException $exception){
+        } catch (RepositoryException $exception) {
             throw new ServiceCallException($exception->getMessage());
         }
     }
@@ -76,8 +77,18 @@ class CategoryService implements CategoryServiceInterface
     {
         try {
             return $this->categoryRepository->delete($id);
-        }catch (RepositoryException $exception){
-            throw new ServiceCallException($exception->getMessage(),$exception->getCode());
+        } catch (RepositoryException $exception) {
+            throw new ServiceCallException($exception->getMessage(), $exception->getCode());
+        }
+    }
+
+    public function getByID(int $id): CategoryResponse
+    {
+        try {
+            $category = $this->categoryRepository->getByID($id);
+            return new CategoryResponse($category->getTitle(), $category->getDescription());
+        } catch (RepositoryException $exception) {
+            throw new ServiceCallException($exception->getMessage(), $exception->getCode());
         }
     }
 }
