@@ -94,4 +94,15 @@ class FAQController extends APIController
             return $this->respondFromServiceCallException($exception);
         }
     }
+
+    public function show(int $id)
+    {
+        try {
+            return $this->respond(
+                data: $this->FAQService->getByID($id)->toArray()
+            );
+        }catch (ServiceCallException $exception){
+            return $this->respondFromServiceCallException($exception);
+        }
+    }
 }
