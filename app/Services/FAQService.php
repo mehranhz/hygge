@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\DTO\PaginatedData;
+use App\DTO\Response\BaseResponse;
 use App\DTO\Response\FAQ\FAQCreateResponse;
+use App\DTO\Response\FAQ\FAQResponse;
 use App\Exceptions\RepositoryException;
 use App\Exceptions\ServiceCallException;
 use App\Repository\FAQRepositoryInterface;
@@ -82,6 +84,23 @@ class FAQService implements FAQServiceInterface
             return $this->FAQRepository->delete($id);
         } catch (RepositoryException $exception) {
             throw new ServiceCallException($exception->getMessage(), $exception->getCode());
+        }
+    }
+
+    public function getByID(int $id): BaseResponse
+    {
+        try {
+            $instance = $this->FAQRepository->getByID($id);
+            if ($instance){
+                return new FAQResponse(
+                    $instance->getTitle(),
+                    $instance->getDescription(),
+                    $instance->getVisibility(),
+                );
+            }
+            throw new ServiceCallException("unknown error while trying to get faq with id $id");
+        }catch (RepositoryException $exception){
+            throw new ServiceCallException($exception->getMessage());
         }
     }
 }
